@@ -1,6 +1,7 @@
 package org.xsakon;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
@@ -52,53 +53,25 @@ public class Main {
     }
 
     private static int checkBracketCorrectness(String expression) {
-        int index = -1;
-        int numOpenedBrackets = 0;
-        int numClosedBrackets = 0;
+        Stack<Integer> stack = new Stack<>();
 
-        for (Character ch : expression.toCharArray()) {
-            if (ch.toString().equals("(")) {
-                numOpenedBrackets++;
-            }
-            else if (ch.toString().equals(")")) {
-                numClosedBrackets++;
-            }
-        }
-
-        if (numOpenedBrackets < numClosedBrackets) {
-            // returns index of redundant bracket
-            int bracketsLeft = numClosedBrackets - numOpenedBrackets;
-
-            for (int i = 0; i < expression.length(); i++){
-                char ch = expression.charAt(i);
-
-                if (bracketsLeft > 0 && Character.toString(ch).equals(")")){
-                    bracketsLeft--;
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);
+            if (ch == '(') {
+                stack.push(i);
+            } else if (ch == ')') {
+                if (stack.isEmpty()) {
+                    return i;  // Redundant closing bracket
                 }
-                else if (bracketsLeft == 0 && Character.toString(ch).equals(")")) {
-                    index = i;
-                    break;
-                }
-            }
-        }
-        else if (numOpenedBrackets > numClosedBrackets) {
-            // returns index of redundant bracket
-            int bracketsLeft = numOpenedBrackets - numClosedBrackets;
-
-            for (int i = 0; i < expression.length(); i++){
-                char ch = expression.charAt(i);
-
-                if (bracketsLeft > 0 && Character.toString(ch).equals("(")){
-                    bracketsLeft--;
-                }
-                else if (bracketsLeft == 0 && Character.toString(ch).equals("(")) {
-                    index = i;
-                    break;
-                }
+                stack.pop();
             }
         }
 
-        return index;
+        if (!stack.isEmpty()) {
+            return stack.peek();  // Redundant opening bracket
+        }
+
+        return -1; // All brackets correct
     }
 
     public static void highlightError(String expression, String message, int errorIndex) {
