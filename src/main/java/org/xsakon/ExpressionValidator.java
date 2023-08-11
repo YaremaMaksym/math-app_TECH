@@ -26,15 +26,14 @@ public class ExpressionValidator {
         }
     }
 
-    private static Optional<Integer> checkIfHasInvalidCharacters(String expression){
-        String regex = "[^0-9x+\\-*/().]";
+    private static Optional<Integer> checkIfHasInvalidCharacters(String expression) {
+        String regex = "[^0-9x=+\\-*/().]";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(expression);
 
-        if (matcher.find()){
+        if (matcher.find()) {
             return Optional.of(matcher.start());
-        }
-        else {
+        } else {
             return Optional.empty();
         }
     }
