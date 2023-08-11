@@ -21,6 +21,14 @@ public class ExpressionValidator {
             isCorrect = false;
         }
 
+        Optional<Integer> wrongOperationIndex = checkOperationsCorrectness(expression);
+        if (wrongOperationIndex.isPresent()) {
+            highlightError(expression, "Expression has invalid operation", wrongOperationIndex.get());
+            isCorrect = false;
+        }
+
+        isCorrect = hasValidEqualSignUsage(expression);
+
         if (isCorrect) {
             System.out.println("Expression is correct");
         }
@@ -58,6 +66,52 @@ public class ExpressionValidator {
         }
 
         return Optional.empty(); // All brackets correct
+    }
+
+    private static Optional<Integer> checkOperationsCorrectness(String expression) {
+        String[] invalidPatterns = {
+                "\\d+\\.\\d*\\.",           // more than one "." in numbers
+                "^[*.=/]",                  // expression starts with * . / =
+                "[+\\-*.=/]$",              // expression ends with + - * . / =
+                "[\\-+.]{2,}",              // more than one + or -
+                "[*/.]{2,}",                // more than one * / .
+//                "\\d+\\(",                  // digit right before closed brackets
+//                "\\)\\d+",                  // digit right after open brackets
+//                "\\)x",                     // x right before closed bracket
+//                "x\\(",                     // x right after open bracket
+                "x\\d+",                    // x right before digits
+                "\\d+x\\d+",                // x in between digits
+                "\\d+x",                    // x right after digit
+                "[x\\d+]\\(",               // x or digit right before closed bracket
+                "\\)[x\\d+]",               // x or digit right after open brackets
+                "[+\\-*./=]\\)",            // + - * . / = right before closed bracket
+                "\\([+\\-*./=]\\("          // + - * . / = between open brackets
+        };
+
+        for (String patternStr : invalidPatterns) {
+            Pattern pattern = Pattern.compile(patternStr);
+            Matcher matcher = pattern.matcher(expression);
+            if (matcher.find()) {
+                return Optional.of(matcher.start());
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static boolean hasValidEqualSignUsage(String expression) {
+        if (expression.indexOf('=') != expression.lastIndexOf('=')){
+            System.out.println(expression);
+            System.out.println("Expression has more than one \"=\" sign");
+            return false;
+        }
+        else if (!expression.contains("=")){
+            System.out.println(expression);
+            System.out.println("Expression doesn't have \"=\" sign");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private static void highlightError(String expression, String message, int errorIndex) {
