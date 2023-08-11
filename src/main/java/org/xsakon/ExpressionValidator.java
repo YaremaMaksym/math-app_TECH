@@ -27,7 +27,10 @@ public class ExpressionValidator {
             isCorrect = false;
         }
 
-        if (!hasValidEqualSignUsage(expression)){
+        Optional<String> equalSignErrorMessage = checkIfHasValidEqualSignUsage(expression);
+        if (equalSignErrorMessage.isPresent()) {
+            System.out.println(expression);
+            System.out.println(equalSignErrorMessage.get());
             isCorrect = false;
         }
 
@@ -101,18 +104,13 @@ public class ExpressionValidator {
         return Optional.empty();
     }
 
-    private static boolean hasValidEqualSignUsage(String expression) {
-        if (expression.indexOf('=') != expression.lastIndexOf('=')){
-            System.out.println(expression);
-            System.out.println("Expression has more than one \"=\" sign");
-            return false;
-        }
-        else if (!expression.contains("=")){
-            System.out.println(expression);
-            System.out.println("Expression doesn't have \"=\" sign");
-            return false;
+    private static Optional<String> checkIfHasValidEqualSignUsage(String expression) {
+        if (expression.indexOf('=') != expression.lastIndexOf('=')) {
+            return Optional.of("Expression has more than one \"=\" sign");
+        } else if (!expression.contains("=")) {
+            return Optional.of("Expression doesn't have \"=\" sign");
         } else {
-            return true;
+            return Optional.empty();
         }
     }
 
