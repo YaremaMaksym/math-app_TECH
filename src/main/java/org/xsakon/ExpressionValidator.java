@@ -30,7 +30,7 @@ public class ExpressionValidator {
         Optional<String> equalSignErrorMessage = checkIfHasValidEqualSignUsage(expression);
         if (equalSignErrorMessage.isPresent()) {
             System.out.println(expression);
-            System.out.println(equalSignErrorMessage.get());
+            System.out.println("Error: " + equalSignErrorMessage.get());
             isCorrect = false;
         }
 
