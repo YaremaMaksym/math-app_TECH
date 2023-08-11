@@ -1,5 +1,5 @@
 package org.xsakon;
-
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -39,9 +39,9 @@ public class Main {
 
         String expression = scanner.nextLine();
 
-        int wrongBracketIndex = checkBracketCorrectness(expression);
-        if (wrongBracketIndex != -1) {
-            highlightError(expression, "Wrong bracket placement", wrongBracketIndex);
+        Optional<Integer> wrongBracketIndex = checkBracketCorrectness(expression);
+        if (wrongBracketIndex.isPresent()) {
+            highlightError(expression, "Wrong bracket placement", wrongBracketIndex.get());
             isCorrect = false;
         }
 
@@ -52,7 +52,7 @@ public class Main {
         return expression;
     }
 
-    private static int checkBracketCorrectness(String expression) {
+    private static Optional<Integer> checkBracketCorrectness(String expression) {
         Stack<Integer> stack = new Stack<>();
 
         for (int i = 0; i < expression.length(); i++) {
@@ -61,17 +61,17 @@ public class Main {
                 stack.push(i);
             } else if (ch == ')') {
                 if (stack.isEmpty()) {
-                    return i;  // Redundant closing bracket
+                    return Optional.of(i);  // Redundant closing bracket
                 }
                 stack.pop();
             }
         }
 
         if (!stack.isEmpty()) {
-            return stack.peek();  // Redundant opening bracket
+            return Optional.of(stack.peek());  // Redundant opening bracket
         }
 
-        return -1; // All brackets correct
+        return Optional.empty(); // All brackets correct
     }
 
     public static void highlightError(String expression, String message, int errorIndex) {
