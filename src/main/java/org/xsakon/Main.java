@@ -1,5 +1,4 @@
 package org.xsakon;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -12,6 +11,7 @@ public class Main {
         while (keepLooping) {
             try {
                 displayMenu();
+                System.out.print("Choice: ");
                 String choice = scanner.nextLine();
                 switch (Integer.parseInt(choice)) {
                     case 1 -> enterExpressions();
@@ -36,6 +36,7 @@ public class Main {
     private static String enterExpressions() {
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("\nEnter your expression: ");
         String expression = scanner.nextLine();
 
         ExpressionValidator.checkCorrectness(expression);
