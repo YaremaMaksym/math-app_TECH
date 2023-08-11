@@ -27,7 +27,9 @@ public class ExpressionValidator {
             isCorrect = false;
         }
 
-        isCorrect = hasValidEqualSignUsage(expression);
+        if (!hasValidEqualSignUsage(expression)){
+            isCorrect = false;
+        }
 
         if (isCorrect) {
             System.out.println("Expression is correct");
