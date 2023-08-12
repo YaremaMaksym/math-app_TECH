@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpressionValidator {
-    public static void checkCorrectness(String expression) {
+    public static boolean checkCorrectness(String expression) {
         boolean isCorrect = true;
 
         Optional<Integer> wrongBracketIndex = checkBracketCorrectness(expression);
@@ -34,9 +34,7 @@ public class ExpressionValidator {
             isCorrect = false;
         }
 
-        if (isCorrect) {
-            System.out.println("Expression is correct");
-        }
+        return isCorrect;
     }
 
     private static Optional<Integer> checkIfHasInvalidCharacters(String expression) {
