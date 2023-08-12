@@ -87,7 +87,7 @@ public class ExpressionValidator {
                 "x\\d+",                    // x right before digits
                 "\\d+x\\d+",                // x in between digits
                 "\\d+x",                    // x right after digit
-                "[x\\d+]\\(",               // x or digit right before closed bracket
+                "(?<=[0-9x])\\(",           // x or digit right before closed bracket
                 "\\)[x\\d+]",               // x or digit right after open brackets
                 "[+\\-*./=]\\)",            // + - * . / = right before closed bracket
                 "\\([+\\-*./=]\\("          // + - * . / = between open brackets
