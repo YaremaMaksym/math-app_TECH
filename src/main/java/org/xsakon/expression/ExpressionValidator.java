@@ -1,4 +1,4 @@
-package org.xsakon;
+package org.xsakon.expression;
 
 import java.util.Optional;
 import java.util.Stack;
@@ -87,8 +87,8 @@ public class ExpressionValidator {
                 "x\\d+",                    // x right before digits
                 "\\d+x\\d+",                // x in between digits
                 "\\d+x",                    // x right after digit
-                "(?<=[0-9x])\\(",           // x or digit right before closed bracket
-                "\\)[x\\d+]",               // x or digit right after open brackets
+                "[0-9x]\\(",           // x or digit right before open bracket
+                "\\)[0-9x]",               // x or digit right after closed brackets
                 "[+\\-*./=]\\)",            // + - * . / = right before closed bracket
                 "\\([+\\-*./=]\\("          // + - * . / = between open brackets
         };
