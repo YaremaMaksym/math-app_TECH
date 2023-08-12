@@ -34,6 +34,13 @@ public class ExpressionValidator {
             isCorrect = false;
         }
 
+        Optional<String> containsXErrorMessage = checkIfContainsX(expression);
+        if (containsXErrorMessage.isPresent()) {
+            System.out.println("Error: " + containsXErrorMessage.get());
+            System.out.println(expression);
+            isCorrect = false;
+        }
+
         return isCorrect;
     }
 
@@ -106,6 +113,14 @@ public class ExpressionValidator {
         if (expression.indexOf('=') != expression.lastIndexOf('=')) {
             return Optional.of("Expression has more than one \"=\" sign");
         } else if (!expression.contains("=")) {
+            return Optional.of("Expression doesn't have \"=\" sign");
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private static Optional<String> checkIfContainsX(String expression) {
+        if (!expression.contains("x")) {
             return Optional.of("Expression doesn't have \"=\" sign");
         } else {
             return Optional.empty();
