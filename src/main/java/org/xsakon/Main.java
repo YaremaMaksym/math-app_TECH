@@ -37,7 +37,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nEnter your expression: ");
-        String expression = scanner.nextLine();
+        String expressionStr = scanner.nextLine();
+
+        ExpressionValidator.checkCorrectness(expressionStr);
 
         ExpressionValidator.checkCorrectness(expression);
 
