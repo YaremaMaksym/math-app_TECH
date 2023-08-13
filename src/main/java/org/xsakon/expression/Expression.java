@@ -2,15 +2,14 @@ package org.xsakon.expression;
 
 public class Expression {
     private Long id;
-    private String expression;
-
-    public Expression(Long id, String expression) {
-        this.id = id;
-        this.expression = expression;
-    }
+    private final String expression;
 
     public Expression(String expression) {
         this.expression = expression;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

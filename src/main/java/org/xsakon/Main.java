@@ -98,7 +98,15 @@ public class Main {
 
         if (ExpressionValidator.checkCorrectness(expressionStr)){
             Expression expression = new Expression(expressionStr);
-            expressionDao.save(expression);
+
+            Optional<Long> expressionIdOptional = expressionDao.save(expression);
+            if(expressionIdOptional.isPresent()){
+                expression.setId(expressionIdOptional.get());
+            } else {
+                System.out.println("Error during saving an object in db");
+                return Optional.empty();
+            }
+
             System.out.println("Expression saved");
 
             return Optional.of(expression);
