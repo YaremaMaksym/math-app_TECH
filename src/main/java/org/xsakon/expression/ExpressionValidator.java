@@ -85,6 +85,7 @@ public class ExpressionValidator {
                 "[+\\-*.=/]$",              // expression ends with + - * . / =
                 "[\\-+.]{2,}",              // more than one + or -
                 "[*/.]{2,}",                // more than one * / .
+                "[x]{2,}",                  // two or more "x" together
 //                "\\d+\\(",                  // digit right before closed brackets
 //                "\\)\\d+",                  // digit right after open brackets
 //                "\\)x",                     // x right before closed bracket
