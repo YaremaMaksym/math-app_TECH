@@ -96,7 +96,9 @@ public class ExpressionValidator {
                 "[0-9x]\\(",           // x or digit right before open bracket
                 "\\)[0-9x]",               // x or digit right after closed brackets
                 "[+\\-*./=]\\)",            // + - * . / = right before closed bracket
-                "\\([+\\-*./=]\\("          // + - * . / = between open brackets
+                "\\([+\\-*./=]\\(",          // + - * . / = between open brackets
+                "\\)\\(",                   // open bracket right after closed bracket
+                "\\(\\)"                    // empty brackets
         };
 
         for (String patternStr : invalidPatterns) {
