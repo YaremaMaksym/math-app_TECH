@@ -122,7 +122,7 @@ public class ExpressionValidator {
 
     private static Optional<String> checkIfContainsX(String expression) {
         if (!expression.contains("x")) {
-            return Optional.of("Expression doesn't have \"=\" sign");
+            return Optional.of("Expression doesn't have \"x\"");
         } else {
             return Optional.empty();
         }
