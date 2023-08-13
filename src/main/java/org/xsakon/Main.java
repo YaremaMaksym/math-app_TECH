@@ -1,7 +1,10 @@
 package org.xsakon;
 import org.xsakon.expression.Expression;
 import org.xsakon.expression.ExpressionDao;
+import org.xsakon.expression.ExpressionEvaluator;
 import org.xsakon.expression.ExpressionValidator;
+import org.xsakon.root.Root;
+import org.xsakon.root.RootDao;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -13,6 +16,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         ExpressionDao expressionDao = new ExpressionDao();
+        RootDao rootDao = new RootDao();
         Scanner scanner = new Scanner(System.in);
 
         boolean keepLooping = true;
@@ -23,7 +27,7 @@ public class Main {
                 System.out.print("Choice: ");
                 String choice = scanner.nextLine();
                 switch (Integer.parseInt(choice)) {
-                    case 1 -> enterExpressionMenu(expressionDao);
+                    case 1 -> enterExpressionMenu(expressionDao, rootDao);
                     case 2 -> keepLooping = false;
                     default -> System.out.println(choice + " not a valid option");
                 }
@@ -52,7 +56,7 @@ public class Main {
                 """);
     }
 
-    private static void enterExpressionMenu(ExpressionDao expressionDao) {
+    private static void enterExpressionMenu(ExpressionDao expressionDao, RootDao rootDao) {
         Scanner scanner = new Scanner(System.in);
         Expression expression = null;
         boolean keepLooping = true;
@@ -76,7 +80,7 @@ public class Main {
                     }
                     case 2 -> {
                         if (expression != null){
-                            enterRoot();
+                            enterRoot(rootDao, expression);
                         } else {
                             System.out.println("First enter a valid expression");
                         }
@@ -115,11 +119,21 @@ public class Main {
         }
     }
 
-    private static void enterRoot() {
+    private static void enterRoot(RootDao rootDao, Expression expression) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nEnter root: ");
         Double rootValue = scanner.nextDouble();
+
+        String expressionWithInsertedXVal = expression.getExpression().replace("x", Double.toString(rootValue));
+
+        if (ExpressionEvaluator.checkIfRootIsCorrect(expressionWithInsertedXVal)){
+            Root root = new Root(expression.getId(), rootValue);
+            rootDao.save(root);
+            System.out.println("Root saved");
+        } {
+            System.out.println("Root is wrong");
+        }
     }
 
 }
