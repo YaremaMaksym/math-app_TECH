@@ -6,6 +6,7 @@ import org.xsakon.expression.ExpressionValidator;
 import org.xsakon.root.Root;
 import org.xsakon.root.RootDao;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -28,7 +29,8 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (Integer.parseInt(choice)) {
                     case 1 -> enterExpressionMenu(expressionDao, rootDao);
-                    case 2 -> keepLooping = false;
+                    case 2 -> findByRoot(rootDao);
+                    case 3 -> keepLooping = false;
                     default -> System.out.println(choice + " not a valid option");
                 }
             } catch (Exception e) {
@@ -42,7 +44,8 @@ public class Main {
                 \n
                 Main Menu:
                 1️⃣ - Enter Expression Menu
-                2️⃣ - Exit
+                2️⃣ - Find Expressions By Root
+                3️⃣ - Exit
                 """);
     }
 
@@ -120,10 +123,7 @@ public class Main {
     }
 
     private static void enterRootForExpression(RootDao rootDao, Expression expression) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("\nEnter root: ");
-        Double rootValue = scanner.nextDouble();
+        double rootValue = enterRoot();
 
         String expressionWithInsertedXVal = expression.getExpression().replace("x", Double.toString(rootValue));
 
@@ -131,10 +131,36 @@ public class Main {
             Root root = new Root(expression.getId(), rootValue);
             rootDao.save(root);
             System.out.println("Root saved");
-        } {
+        } else {
             System.out.println("Root is wrong");
         }
     }
+
+    public static Double enterRoot() {
+        Scanner scanner = new Scanner(System.in);
+        Double rootValue;
+
+        while (true) {
+            try {
+                System.out.println("\nEnter root: ");
+                rootValue = scanner.nextDouble();
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + ". Please enter a number");
+            }
+        }
+
+        return rootValue;
+    }
+
+    private static void findByRoot(RootDao rootDao) {
+
+        double rootValue = enterRoot();
+        List<Expression> expressions = rootDao.selectAllByRoot(rootValue);
+
+        expressions.forEach(System.out::println);
+    }
+
 
 }
 

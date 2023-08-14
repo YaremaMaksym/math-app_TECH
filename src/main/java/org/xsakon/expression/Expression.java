@@ -8,6 +8,11 @@ public class Expression {
         this.expression = expression;
     }
 
+    public Expression(Long id, String expression) {
+        this.id = id;
+        this.expression = expression;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -18,5 +23,13 @@ public class Expression {
 
     public String getExpression() {
         return expression;
+    }
+
+    @Override
+    public String toString() {
+        return "Expression{" +
+                "id=" + id +
+                ", expression='" + expression + '\'' +
+                '}';
     }
 }
