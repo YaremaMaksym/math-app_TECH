@@ -80,7 +80,7 @@ public class Main {
                     }
                     case 2 -> {
                         if (expression != null){
-                            enterRoot(rootDao, expression);
+                            enterRootForExpression(rootDao, expression);
                         } else {
                             System.out.println("First enter a valid expression");
                         }
@@ -119,7 +119,7 @@ public class Main {
         }
     }
 
-    private static void enterRoot(RootDao rootDao, Expression expression) {
+    private static void enterRootForExpression(RootDao rootDao, Expression expression) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nEnter root: ");
