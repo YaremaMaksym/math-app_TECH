@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 // example expressions
 // 1+(3-4)=25/(2*(3-5*x))
@@ -58,6 +59,44 @@ public class Main {
                 2️⃣ - Enter root for current expression
                 3️⃣ - Exit to Main Menu
                 """);
+    }
+
+    private static void displayExpressionsTable(List<Expression> expressions) {
+        String idText = "ID";
+        String expressionText = "Expression";
+        String rootsText = "Roots";
+
+        int idWidth = idText.length();
+        int expressionWidth = expressionText.length();
+        int rootsWidth = rootsText.length();
+
+        for (Expression expression : expressions) {
+            idWidth = Math.max(idWidth, String.valueOf(expression.getId()).length());
+            expressionWidth = Math.max(expressionWidth, expression.getExpression().length());
+
+            StringBuilder rootsStringBuilder = new StringBuilder();
+            for (Double root : expression.getRootValues()) {
+                rootsStringBuilder.append(root).append(", ");
+            }
+            rootsWidth = Math.max(rootsWidth, rootsStringBuilder.toString().trim().length());
+        }
+
+        String headerFormat = "| %-" + idWidth + "s | %-" + expressionWidth + "s | %-" + rootsWidth + "s |";
+        String divider = "+" + "-".repeat(idWidth + 2) + "+" + "-".repeat(expressionWidth + 2) + "+" + "-".repeat(rootsWidth + 2) + "+";
+        String rowFormat = "| %-" + idWidth + "d | %-"+ expressionWidth + "s | %-"+ rootsWidth +"s |";
+
+        System.out.println("\nResults of search:");
+        System.out.println(divider);
+        System.out.printf((headerFormat) + "%n", "ID", "Expression", "Roots");
+        System.out.println(divider);
+
+        for (Expression expression : expressions) {
+            String rootsListToString = expression.getRootValues().stream().map(Object::toString).collect(Collectors.joining(", "));
+            System.out.printf((rowFormat) + "%n", expression.getId(), expression.getExpression(), rootsListToString);
+        }
+
+        System.out.println(divider);
+
     }
 
     private static void enterExpressionMenu(ExpressionDao expressionDao, RootDao rootDao) {
@@ -184,7 +223,7 @@ public class Main {
         List<Double> rootValues = enterMultipleRoots();
         List<Expression> expressions = rootDao.selectAllByRoots(rootValues);
 
-        expressions.forEach(System.out::println);
+        displayExpressionsTable(expressions);
     }
 
 
