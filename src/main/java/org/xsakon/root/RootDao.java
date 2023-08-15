@@ -4,9 +4,7 @@ import org.xsakon.expression.Expression;
 import org.xsakon.jdbc.DBConnectionManager;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class RootDao {
     public void save(Root root){
@@ -26,10 +24,12 @@ public class RootDao {
     }
 
     public List<Expression> selectAllByRoots(List<Double> rootValues) {
-        String query = "SELECT * FROM expressions " +
-                "INNER JOIN roots ON expressions.id = roots.expression_id " +
-                "WHERE roots.value IN  (" + String.join(",", Collections.nCopies(rootValues.size(), "?")) + ")";
+        String query = "SELECT e.id AS expression_id, e.expression AS expression, r.value AS root_value " +
+                "FROM expressions e " +
+                "RIGHT JOIN roots r ON e.id = r.expression_id " +
+                "WHERE e.id IN (SELECT expression_id FROM roots WHERE value IN (" + String.join(",", Collections.nCopies(rootValues.size(), "?")) + "))";
 
+        Map<Long, Expression> expressionMap = new HashMap<>();
         List<Expression> expressions = new ArrayList<>();
 
         try (Connection connection = DBConnectionManager.openConnection();
@@ -41,10 +41,18 @@ public class RootDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 while (resultSet.next()) {
-                    Expression expression = new Expression(resultSet.getLong("id"), resultSet.getString("expression"));
-                    expressions.add(expression);
+                    long expressionId = resultSet.getLong("expression_id");
+                    String expressionStr = resultSet.getString("expression");
+                    double rootValue = resultSet.getDouble("root_value");
+
+                    Expression expression = expressionMap.getOrDefault(expressionId, new Expression(expressionId, expressionStr));
+                    expression.addRoot(rootValue);
+
+                    expressionMap.put(expressionId, expression);
                 }
             }
+
+            expressions.addAll(expressionMap.values());
 
         } catch (SQLException e) {
             e.printStackTrace();
