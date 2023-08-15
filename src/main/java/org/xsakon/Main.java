@@ -31,7 +31,7 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (Integer.parseInt(choice)) {
                     case 1 -> enterExpressionMenu(expressionDao, rootDao);
-                    case 2 -> findByRoot(rootDao);
+                    case 2 -> findByMultipleRoots(rootDao);
                     case 3 -> keepLooping = false;
                     default -> System.out.println(choice + " not a valid option");
                 }
@@ -218,7 +218,7 @@ public class Main {
         return rootValues;
     }
 
-    private static void findByRoot(RootDao rootDao) {
+    private static void findByMultipleRoots(RootDao rootDao) {
 
         List<Double> rootValues = enterMultipleRoots();
         List<Expression> expressions = rootDao.selectAllByRoots(rootValues);
