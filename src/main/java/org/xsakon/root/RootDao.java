@@ -5,6 +5,7 @@ import org.xsakon.jdbc.DBConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RootDao {
@@ -24,17 +25,19 @@ public class RootDao {
 
     }
 
-    public List<Expression> selectAllByRoot(double rootValue) {
+    public List<Expression> selectAllByRoots(List<Double> rootValues) {
         String query = "SELECT * FROM expressions " +
                 "INNER JOIN roots ON expressions.id = roots.expression_id " +
-                "WHERE roots.value = ?";
+                "WHERE roots.value IN  (" + String.join(",", Collections.nCopies(rootValues.size(), "?")) + ")";
 
         List<Expression> expressions = new ArrayList<>();
 
         try (Connection connection = DBConnectionManager.openConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setDouble(1, rootValue);
+            for (int i = 0; i < rootValues.size(); i++) {
+                preparedStatement.setDouble(i + 1, rootValues.get(i));
+            }
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 while (resultSet.next()) {

@@ -6,6 +6,7 @@ import org.xsakon.expression.ExpressionValidator;
 import org.xsakon.root.Root;
 import org.xsakon.root.RootDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -44,7 +45,7 @@ public class Main {
                 \n
                 Main Menu:
                 1️⃣ - Enter Expression Menu
-                2️⃣ - Find Expressions By Root
+                2️⃣ - Find Expressions By Roots
                 3️⃣ - Exit
                 """);
     }
@@ -153,10 +154,35 @@ public class Main {
         return rootValue;
     }
 
+    public static List<Double> enterMultipleRoots() {
+        Scanner scanner = new Scanner(System.in);
+        List<Double> rootValues = new ArrayList<>();
+        String stringRootValues;
+
+        while (true) {
+            try {
+                System.out.println("\nEnter one or more roots separated by spaces: ");
+                stringRootValues = scanner.nextLine();
+
+                String[] rootValuesArray = stringRootValues.split(" ");
+
+                for (String value : rootValuesArray) {
+                    rootValues.add(Double.parseDouble(value));
+                }
+
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + ". Please enter a number");
+            }
+        }
+
+        return rootValues;
+    }
+
     private static void findByRoot(RootDao rootDao) {
 
-        double rootValue = enterRoot();
-        List<Expression> expressions = rootDao.selectAllByRoot(rootValue);
+        List<Double> rootValues = enterMultipleRoots();
+        List<Expression> expressions = rootDao.selectAllByRoots(rootValues);
 
         expressions.forEach(System.out::println);
     }
