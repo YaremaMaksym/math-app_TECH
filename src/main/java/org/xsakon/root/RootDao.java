@@ -60,4 +60,35 @@ public class RootDao {
 
         return expressions;
     }
+
+    public List<Expression> selectAllWithSingleRoot() {
+        String query = "SELECT expressions.id, expression, MAX(roots.value) AS root_value " +
+                "FROM expressions\n" +
+                "JOIN roots ON expressions.id = roots.expression_id " +
+                "GROUP BY expressions.id, expression " +
+                "HAVING COUNT(expression_id) = 1";
+
+        List<Expression> expressions = new ArrayList<>();
+
+        try (Connection connection = DBConnectionManager.openConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()) {
+                    long expressionId = resultSet.getLong("id");
+                    String expressionStr = resultSet.getString("expression");
+                    double rootValue = resultSet.getDouble("root_value");
+
+                    Expression expression = new Expression(expressionId, expressionStr);
+                    expression.addRoot(rootValue);
+                    expressions.add(expression);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return expressions;
+    }
 }

@@ -32,7 +32,8 @@ public class Main {
                 switch (Integer.parseInt(choice)) {
                     case 1 -> enterExpressionMenu(expressionDao, rootDao);
                     case 2 -> findByMultipleRoots(rootDao);
-                    case 3 -> keepLooping = false;
+                    case 3 -> findAllWithSingleRoot(rootDao);
+                    case 4 -> keepLooping = false;
                     default -> System.out.println(choice + " not a valid option");
                 }
             } catch (Exception e) {
@@ -45,9 +46,10 @@ public class Main {
         System.out.println("""
                 \n
                 Main Menu:
-                1️⃣ - Enter Expression Menu
-                2️⃣ - Find Expressions By Roots
-                3️⃣ - Exit
+                1️⃣ - Enter expression Menu
+                2️⃣ - Find expressions by roots
+                3️⃣ - Find expressions with one root
+                4️⃣ - Exit
                 """);
     }
 
@@ -55,9 +57,9 @@ public class Main {
         System.out.println("""
                 \n
                 Expression Menu:
-                1️⃣ - Enter Expression
+                1️⃣ - Enter expression
                 2️⃣ - Enter root for current expression
-                3️⃣ - Exit to Main Menu
+                3️⃣ - Exit to main menu
                 """);
     }
 
@@ -226,6 +228,11 @@ public class Main {
         displayExpressionsTable(expressions);
     }
 
+    private static void findAllWithSingleRoot(RootDao rootDao) {
+
+        List<Expression> expressions = rootDao.selectAllWithSingleRoot();
+        displayExpressionsTable(expressions);
+    }
 
 }
 
