@@ -23,6 +23,34 @@ public class RootDao {
 
     }
 
+    public Optional<Root> findByExpressionIdAndValue(Long expressionId, double value) {
+        String query = "SELECT roots.id AS root_id " +
+                "FROM expressions " +
+                "JOIN roots ON expressions.id = roots.expression_id " +
+                "WHERE expression_id = ? AND value = ?";
+
+        try (Connection connection = DBConnectionManager.openConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, expressionId);
+            preparedStatement.setDouble(2, value);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    long rootId = resultSet.getLong("root_id");
+
+                    Root root = new Root(rootId, expressionId, value);
+                    return Optional.of(root);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
     public List<Expression> selectAllByRoots(List<Double> rootValues) {
         String query = "SELECT e.id AS expression_id, e.expression AS expression, r.value AS root_value " +
                 "FROM expressions e " +
