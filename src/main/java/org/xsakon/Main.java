@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 // example expressions
 // 3+(10-2*3)=28*x/(2*(5-6)) x=-0.5
 // 9-2*3=8*x*(3+2)/(2*(13-1)) x=9/5
-// x*x-4*x+3=0
+// x*x-4*x+3=0 x=1 x=3
+// x*x-6*x+5=0 x=1 x=5
 
 public class Main {
     public static void main(String[] args) {
@@ -147,23 +148,28 @@ public class Main {
         System.out.println("\nEnter your expression: ");
         String expressionStr = scanner.nextLine();
 
-        if (ExpressionValidator.checkCorrectness(expressionStr)){
-            Expression expression = new Expression(expressionStr);
+        if (ExpressionValidator.checkCorrectness(expressionStr)) {
 
-            Optional<Long> expressionIdOptional = expressionDao.save(expression);
-            if(expressionIdOptional.isPresent()){
-                expression.setId(expressionIdOptional.get());
+            Optional<Expression> expressionOptional = expressionDao.findByExpression(expressionStr);
+            if (expressionOptional.isEmpty()) {
+
+                Expression expression = new Expression(expressionStr);
+                Optional<Long> expressionIdOptional = expressionDao.save(expression);
+                if (expressionIdOptional.isPresent()) {
+                    expression.setId(expressionIdOptional.get());
+                } else {
+                    System.out.println("Error during saving an object in db");
+                    return Optional.empty();
+                }
+                System.out.println("Expression saved");
+                return Optional.of(expression);
+
             } else {
-                System.out.println("Error during saving an object in db");
-                return Optional.empty();
+                System.out.println("Expression already present in DB");
+                return expressionOptional;
             }
-
-            System.out.println("Expression saved");
-
-            return Optional.of(expression);
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     private static void enterRootForExpression(RootDao rootDao, Expression expression) {
@@ -172,9 +178,19 @@ public class Main {
         String expressionWithInsertedXVal = expression.getExpression().replace("x", Double.toString(rootValue));
 
         if (ExpressionEvaluator.checkIfRootIsCorrect(expressionWithInsertedXVal)){
-            Root root = new Root(expression.getId(), rootValue);
-            rootDao.save(root);
-            System.out.println("Root saved");
+
+            Optional<Root> rootOptional = rootDao.findByExpressionIdAndValue(expression.getId(), rootValue);
+            if (rootOptional.isEmpty()){
+
+                Root root = new Root(expression.getId(), rootValue);
+                rootDao.save(root);
+                System.out.println("Root saved");
+
+            }
+            else {
+                System.out.println("This root already present in DB for apropriate expression");
+            }
+
         } else {
             System.out.println("Root is wrong");
         }
