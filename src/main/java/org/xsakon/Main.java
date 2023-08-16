@@ -1,4 +1,5 @@
 package org.xsakon;
+import net.sourceforge.jeval.Evaluator;
 import org.xsakon.expression.Expression;
 import org.xsakon.expression.ExpressionDao;
 import org.xsakon.expression.ExpressionEvaluator;
@@ -13,8 +14,9 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 // example expressions
-// 1+(3-4)=25/(2*(3-5*x))
-// 24+(x-2)+4=24*3/(x*-4)
+// 3+(10-2*3)=28*x/(2*(5-6)) x=-0.5
+// 9-2*3=8*x*(3+2)/(2*(13-1)) x=9/5
+// x*x-4*x+3=0
 
 public class Main {
     public static void main(String[] args) {
@@ -185,7 +187,8 @@ public class Main {
         while (true) {
             try {
                 System.out.println("\nEnter root: ");
-                rootValue = scanner.nextDouble();
+                String input = scanner.nextLine();
+                rootValue = Double.valueOf(new Evaluator().evaluate(input));
                 break;
             } catch (Exception e) {
                 System.out.println(e.getMessage() + ". Please enter a number");
@@ -208,7 +211,7 @@ public class Main {
                 String[] rootValuesArray = stringRootValues.split(" ");
 
                 for (String value : rootValuesArray) {
-                    rootValues.add(Double.parseDouble(value));
+                    rootValues.add(Double.valueOf(new Evaluator().evaluate(value)));
                 }
 
                 break;
