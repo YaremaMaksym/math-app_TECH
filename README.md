@@ -14,6 +14,7 @@ The project uses the following technologies:
 
 - Java
 - Jeval (for evaluating expressions)
+- JDBC (for connecting to DB, executing queries and retrieving data)
 - PostgreSQL (as the relational database management system)
 - Maven (for dependency management)
 - Git (for version control)
