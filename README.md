@@ -1,6 +1,8 @@
 # math-app_TECH
 
-This project implements a Java CLI app for calculating the roots of expressions. Users can enter mathematical expressions, calculate their roots, and store the results in a database. The program also validates the correctness of the entered expressions before calculating.
+This project implements a Java CLI app for calculating the roots of expressions.\
+Users can enter mathematical expressions, calculate their roots, and store the results in a database.\
+The program also validates the correctness of the entered expressions before calculating.
 
 ## Table of Contents
 
@@ -11,8 +13,7 @@ This project implements a Java CLI app for calculating the roots of expressions.
 ## Technologies
 
 The project uses the following technologies:
-
-- Java
+- Java 17
 - Jeval (for evaluating expressions)
 - JDBC (for connecting to DB, executing queries and retrieving data)
 - PostgreSQL (as the relational database management system)
@@ -32,7 +33,6 @@ To run the project locally, follow these steps:
 2. Open the project in your preferred IDE.
     
 3. Set up the database:
-
 * Install and configure PostgreSQL on your system.
 * Update the DBConnectionManager class with your PostgreSQL credentials.
 * Create a new database named math_app.
