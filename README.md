@@ -1,6 +1,6 @@
 # math-app_TECH
 
-This project implements a CLI application for calculating the roots of expressions. Users can enter mathematical expressions, calculate their roots, and store the results in a database. The program also validates the correctness of the entered expressions before calculating.
+This project implements a Java CLI app for calculating the roots of expressions. Users can enter mathematical expressions, calculate their roots, and store the results in a database. The program also validates the correctness of the entered expressions before calculating.
 
 ## Table of Contents
 
